@@ -5,13 +5,15 @@ import 'package:portfolio_x/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import 'model/speaker.dart';
+
 class HeaderScreen extends StatelessWidget {
+  final Speaker speaker;
+
+  const HeaderScreen({Key key, this.speaker}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final nameWidget = "Pawan\nKumar."
-        .text
-        .white
-        .xl6
+    final nameWidget = speaker.name.text.white.xl6
         .lineHeight(1)
         .size(context.isMobile ? 15 : 20)
         .bold
@@ -22,7 +24,9 @@ class HeaderScreen extends StatelessWidget {
               child: VStack([
         ZStack(
           [
-            PictureWidget(),
+            PictureWidget(
+              imageUrl: speaker.imageUrl,
+            ),
             Row(
               children: [
                 VStack([
@@ -38,17 +42,28 @@ class HeaderScreen extends StatelessWidget {
                       .px4()
                       .shimmer(primaryColor: Coolors.accentColor),
                   30.heightBox,
-                  SocialAccounts(),
+                  SocialAccounts(
+                    githubUrl: speaker.githubUrl,
+                    instagramUrl: speaker.instagramUrl,
+                    twitterUrl: speaker.twitterUrl,
+                    youtubeUrl: speaker.youtubeUrl,
+                  ),
                 ]).pSymmetric(
                   h: context.percentWidth * 10,
                   v: 32,
                 ),
                 Expanded(
                   child: VxResponsive(
-                    medium: IntroductionWidget()
+                    medium: IntroductionWidget(
+                      introductionText: speaker.introductionText,
+                      profileUrl: speaker.profileUrl,
+                    )
                         .pOnly(left: 120)
                         .h(context.percentHeight * 60),
-                    large: IntroductionWidget()
+                    large: IntroductionWidget(
+                      introductionText: speaker.introductionText,
+                      profileUrl: speaker.profileUrl
+                    )
                         .pOnly(left: 120)
                         .h(context.percentHeight * 60),
                     fallback: const Offstage(),
@@ -67,10 +82,15 @@ class HeaderScreen extends StatelessWidget {
 }
 
 class IntroductionWidget extends StatelessWidget {
+  final String introductionText, profileUrl;
   const IntroductionWidget({
     Key key,
+    @required
+    this.introductionText,
+    @required
+    this.profileUrl,
   }) : super(key: key);
-
+  String get profileUrlWithoutHttps => profileUrl.substring(8);
   @override
   Widget build(BuildContext context) {
     return VStack(
@@ -78,26 +98,20 @@ class IntroductionWidget extends StatelessWidget {
         [
           " - Introduction".text.gray500.widest.sm.make(),
           10.heightBox,
-          "@googledevexpert for Flutter, Firebase, Dart & Web.\nPublic Speaker, Blogger, Entrepreneur & YouTuber.\nFounder of MTechViral."
-              .text
-              .white
-              .xl3
-              .maxLines(5)
-              .make()
-              .w(context.isMobile
-                  ? context.screenWidth
-                  : context.percentWidth * 40),
+          introductionText.text.white.xl3.maxLines(5).make().w(context.isMobile
+              ? context.screenWidth
+              : context.percentWidth * 40),
           20.heightBox,
         ].vStack(),
         RaisedButton(
           onPressed: () {
-            launch("https://mtechviral.com");
+            launch(profileUrl);
           },
           hoverColor: Vx.purple700,
           shape: Vx.roundedSm,
           color: Coolors.accentColor,
           textColor: Coolors.primaryColor,
-          child: "Visit mtechviral.com".text.make(),
+          child: "Visit $profileUrlWithoutHttps".text.make(),
         ).h(50)
       ],
       // crossAlignment: CrossAxisAlignment.center,
@@ -122,8 +136,10 @@ class CustomAppBar extends StatelessWidget {
 }
 
 class PictureWidget extends StatelessWidget {
+  final String imageUrl;
   const PictureWidget({
     Key key,
+    @required this.imageUrl,
   }) : super(key: key);
 
   @override
@@ -133,7 +149,7 @@ class PictureWidget extends StatelessWidget {
       origin: Offset(context.percentWidth * 2, 0),
       transform: Matrix4.rotationY(pi),
       child: Image.asset(
-        "assets/pic.png",
+        imageUrl,
         fit: BoxFit.cover,
         height: context.percentHeight * 60,
       ),
@@ -142,6 +158,18 @@ class PictureWidget extends StatelessWidget {
 }
 
 class SocialAccounts extends StatelessWidget {
+  final String twitterUrl;
+  final String instagramUrl;
+  final String youtubeUrl;
+  final String githubUrl;
+
+  const SocialAccounts(
+      {Key key,
+      this.twitterUrl,
+      this.instagramUrl,
+      this.youtubeUrl,
+      this.githubUrl})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return [
@@ -149,28 +177,28 @@ class SocialAccounts extends StatelessWidget {
         AntDesign.twitter,
         color: Colors.white,
       ).mdClick(() {
-        launch("https://twitter.com/imthepk");
+        launch(twitterUrl);
       }).make(),
       20.widthBox,
       Icon(
         AntDesign.instagram,
         color: Colors.white,
       ).mdClick(() {
-        launch("https://instagram.com/codepur_ka_superhero");
+        launch(instagramUrl);
       }).make(),
       20.widthBox,
       Icon(
         AntDesign.youtube,
         color: Colors.white,
       ).mdClick(() {
-        launch("https://youtube.com/mtechviral");
+        launch(youtubeUrl);
       }).make(),
       20.widthBox,
       Icon(
         AntDesign.github,
         color: Colors.white,
       ).mdClick(() {
-        launch("https://github.com/iampawan");
+        launch(githubUrl);
       }).make()
     ].hStack();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio_x/colors.dart';
+import 'package:portfolio_x/data/speaker_data.dart';
 import 'package:portfolio_x/footer.dart';
 import 'package:portfolio_x/middle.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -12,8 +13,16 @@ class HomeScreen extends StatelessWidget {
     return Material(
       color: Coolors.primaryColor,
       child: VStack([
-        HeaderScreen(),
-        if (context.isMobile) IntroductionWidget().p16(),
+        ...allSpeakers
+            .map((speaker) => HeaderScreen(
+                  speaker: speaker,
+                ))
+            .toList(),
+            //TODO : Change the following data
+        // if (context.isMobile) IntroductionWidget(
+        //   introductionText: allSpeakers[0].introductionText,
+        //   profileUrl: allSpeakers[0].profileUrl,
+        // ).p16(),
         MiddleScreen(),
         FooterScreen(),
       ]).scrollVertical(),

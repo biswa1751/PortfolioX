@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio_x/colors.dart';
 import 'package:portfolio_x/data/speaker_data.dart';
 import 'package:portfolio_x/footer.dart';
+import 'package:portfolio_x/mentor_info.dart';
 import 'package:portfolio_x/middle.dart';
 import 'package:velocity_x/velocity_x.dart';
 

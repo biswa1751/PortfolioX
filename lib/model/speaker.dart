@@ -7,6 +7,10 @@ class Speaker {
   final String githubUrl;
   final String introductionText;
   final String profileUrl;
+  final String topic;
+  final DateTime startingTime;
+  final DateTime endingTime;
+  final String linkedinUrl;
   Speaker( {
     this.name,
     this.imageUrl,
@@ -16,5 +20,9 @@ class Speaker {
     this.githubUrl,
     this.introductionText,
     this.profileUrl,
+    this.topic,
+    this.startingTime,
+    this.endingTime,
+    this.linkedinUrl,
   });
 }
